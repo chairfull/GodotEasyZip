@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://dapr1h1g6f1qd"]
+
+[ext_resource type="Texture2D" uid="uid://cgnev3xwg70d2" path="res://icon.svg" id="1_v5f5f"]
+
+[sub_resource type="GDScript" id="GDScript_fy6ec"]
+script/source = "extends Node2D
+
+func _ready() -> void:
+	await RenderingServer.frame_post_draw
+	var screenshot := get_viewport().get_texture().get_image()
+	
+	Zip.write(\"user://save.slot\", {
+		\"state.var\": {version=\"10.0.1\", score=12345, position=Vector2(0.0, 1.0)},
+		\"state.json\": {version=\"10.0.1\", score=12345, position=Vector2(0.0, 1.0)},
+		\"level.tscn\": get_tree().current_scene,
+		\"preview.jpeg\": screenshot
+	})
+	
+	# Adding a screenshot.
+	await Zip.write_screenshot(\"user://save.slot\", get_viewport(), \"screen.webp\")
+	
+	# List all files.
+	print(Zip.get_files(\"user://save.slot\"))
+	
+	# Remove the first preview.
+	Zip.remove(\"user://save.slot\", [\"preview.jpeg\"])
+	print(Zip.get_files(\"user://save.slot\"))
+	
+	# Load the scene.
+	print(Zip.read(\"user://save.slot\", \"level.tscn\"))
+	
+	# Load the state.
+	Zip.read(\"user://save.slot\", \"state.var\")
+"
+
+[node name="Demo" type="Node2D"]
+script = SubResource("GDScript_fy6ec")
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(208, 218)
+texture = ExtResource("1_v5f5f")
+
+[node name="Icon2" type="Sprite2D" parent="."]
+position = Vector2(358, 292)
+rotation = -0.35532
+texture = ExtResource("1_v5f5f")
+
+[node name="Icon3" type="Sprite2D" parent="."]
+position = Vector2(648, 178)
+rotation = 0.250573
+texture = ExtResource("1_v5f5f")
