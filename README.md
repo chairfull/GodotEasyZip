@@ -45,5 +45,5 @@ await Zip.write_screenshot("user://data.slot", get_viewport(), "name_and_ext.jpe
 Zip.remove("user://data.slot", ["file.json", "screenshot.jpg"])
 
 # Exactly like write() but preserves the previous content if it exists.
-Zip.append("user://data.slot", {"image.jpg", image})
+Zip.append("user://data.slot", {"image.jpg": image})
 ```
