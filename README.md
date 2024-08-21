@@ -1,4 +1,4 @@
-# Zip
+# Easy Zip
 `v1.0`
 
 Write multiple files to a zip.
